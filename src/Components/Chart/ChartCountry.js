@@ -1,15 +1,36 @@
-import React from 'react';
+import React, {useEffect,useState} from 'react';
+import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 
 function ChartCountry(props) {
 let iso = useParams();
 let iso2 = iso.iso;    
+
+const [confirmed, setConfirmed] = useState('');
+const [recovered, setRecovered] = useState('');
+const [deaths, setDeaths] = useState('');
+
+const getData = async() => {
+    try {
+        let data = await axios(`https://covid19.mathdro.id/api/countries/${iso2}`); 
+        setConfirmed(data.data.confirmed.value);
+        setRecovered(data.data.recovered.value);
+        setDeaths(data.data.deaths.value);
+    } catch (error) {
+        throw error.message;
+    }
+}
+
+useEffect(() => {
+    getData();
+},[iso2])
+
 let data = {
     labels: ['Terkonfirmasi', 'Sembuh', 'Meniggal'],
     datasets: [{
         label: "Data " + iso2,
-        data: [12, 19, 3, 5, 2, 3],
+        data: [confirmed,recovered,deaths],
         backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',

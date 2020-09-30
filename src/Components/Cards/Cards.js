@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import CountUp from 'react-countup';
 import axios from 'axios';
-import {Switch,Route, useHistory, NavLink} from 'react-router-dom';
+import {Switch,Route, useHistory} from 'react-router-dom';
 import ChartGlobal from '../Chart/ChartGlobal';
 import ChartCountry from '../Chart/ChartCountry';
 
@@ -11,7 +11,7 @@ function Cards(props) {
     const [recovered, setRecovered] = useState('');
     const [deaths, setDeaths] = useState('');
     const [countries , setCountries] = useState([]);
-    const [dailyC, setDailyC] = useState([]);
+    // const [dailyC, setDailyC] = useState([]);
     let history = useHistory();
 
     const getData = async() => {
@@ -37,8 +37,12 @@ function Cards(props) {
     }
 
     const changeHandler = (e) => {
-        // console.log(e);
-        history.push(`/${e.target.value}`)
+        console.log(e.target.value);
+       if(e.target.value === "global") {
+            history.push('/')
+       } else {
+           history.push(`/${e.target.value}`)
+       }
     }
 
     useEffect(() => {
