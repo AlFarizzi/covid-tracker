@@ -11,18 +11,19 @@ const [confirmed, setConfirmed] = useState('');
 const [recovered, setRecovered] = useState('');
 const [deaths, setDeaths] = useState('');
 
-const getData = async() => {
-    try {
-        let data = await axios(`https://covid19.mathdro.id/api/countries/${iso2}`); 
-        setConfirmed(data.data.confirmed.value);
-        setRecovered(data.data.recovered.value);
-        setDeaths(data.data.deaths.value);
-    } catch (error) {
-        throw error.message;
-    }
-}
+
 
 useEffect(() => {
+    const getData = async() => {
+        try {
+            let data = await axios(`https://covid19.mathdro.id/api/countries/${iso2}`); 
+            setConfirmed(data.data.confirmed.value);
+            setRecovered(data.data.recovered.value);
+            setDeaths(data.data.deaths.value);
+        } catch (error) {
+            throw error.message;
+        }
+    }
     getData();
 },[iso2])
 

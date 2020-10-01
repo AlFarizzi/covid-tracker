@@ -1,7 +1,7 @@
 let axios = require("axios");
 
 
-const data = {
+const datas = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
       {
@@ -37,14 +37,12 @@ let getDaily = async () => {
             confirmed.push(rs.totalConfirmed);
             newLabels.push(rs.reportDate);
         });
-        data['datasets'][0]['data'] = confirmed;
-        data['labels'] = newLabels;
+        datas['datasets'][0]['data'] = confirmed;
+        datas['labels'] = newLabels;
     } catch (error) {
         throw error.message;
     }
 }
 
 getDaily();
-
-
-  module.exports = data;
+export {datas as data};
