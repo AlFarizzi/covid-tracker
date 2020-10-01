@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import CountUp from 'react-countup';
 import axios from 'axios';
-import {Switch,Route, useHistory} from 'react-router-dom';
+import {Switch, Route, useHistory} from 'react-router-dom';
 import ChartGlobal from '../Chart/ChartGlobal';
 import ChartCountry from '../Chart/ChartCountry';
 
@@ -10,18 +10,28 @@ function Cards(props) {
     const [confirmed, setConfirmed] = useState('');
     const [recovered, setRecovered] = useState('');
     const [deaths, setDeaths] = useState('');
-    const [countries , setCountries] = useState([]);
+    const [countries, setCountries] = useState([]);
+    const [option, setOption] = useState('');
     // const [dailyC, setDailyC] = useState([]);
     let history = useHistory();
 
-    const getData = async() => {
+    const getOld = () => {
+        let old = sessionStorage.getItem('country');
+        if (old === null) {
+            old = "global"
+            setOption(old);
+        } else {
+            setOption(old);
+        }
+    }
+
+    const getData = async () => {
         try {
             let data = await axios('https://covid19.mathdro.id/api');
-            // console.log();
             setConfirmed(data.data.confirmed.value);
             setRecovered(data.data.recovered.value);
             setDeaths(data.data.deaths.value);
-            // console.log(data.data.confirmed.value);
+            console.log(data.data.recovered.value);
         } catch (error) {
             throw error.message;
         }
@@ -29,7 +39,7 @@ function Cards(props) {
 
     const getCountry = async () => {
         try {
-            let data  = await axios('https://covid19.mathdro.id/api/countries');
+            let data = await axios('https://covid19.mathdro.id/api/countries');
             setCountries(data.data.countries);
         } catch (error) {
             throw error.message;
@@ -37,18 +47,30 @@ function Cards(props) {
     }
 
     const changeHandler = (e) => {
-        console.log(e.target.value);
-       if(e.target.value === "global") {
-            history.push('/')
-       } else {
-           history.push(`/${e.target.value}`)
-       }
+        let old = sessionStorage.setItem('country', e.target.value);
+        setOption(old)
+        console.log('bisa');
+        if (e.target.value === "global") {
+            history.replace('/');
+            history.go('/');
+        } else {
+            let a = e.target.value;
+            axios
+                .get(`https://covid19.mathdro.id/api/countries/${e.target.value}`)
+                .then(data => {
+                    setConfirmed(data.data.confirmed.value);
+                    setRecovered(data.data.recovered.value);
+                    setDeaths(data.data.deaths.value);
+                    history.push(`/${a}`)
+                })
+        }
     }
 
     useEffect(() => {
         getData();
         getCountry();
-    },[])
+        getOld();
+    }, [])
 
     return (
         <div className="container mx-auto d-block mt-5">
@@ -60,11 +82,11 @@ function Cards(props) {
                             <div className="d-flex">
                                 <div className="text-white">
                                     <p className="text-white mb-0">Total Positif</p>
-                                    <h2 className="mb-0 number-font"><CountUp end={confirmed} /></h2>
+                                    <h2 className="mb-0 number-font"><CountUp end={confirmed}/></h2>
                                     <p className="text-white mb-0">Orang</p>
                                 </div>
                                 <div className="ml-auto">
-                                    <img src="asset/img/sad.png" alt="Positif" width="50" height="50" />
+                                    <img src="asset/img/sad.png" alt="Positif" width="50" height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +103,7 @@ function Cards(props) {
                                     <p className="text-white mb-0">Orang</p>
                                 </div>
                                 <div className="ml-auto">
-                                    <img src="asset/img/happy.png" alt="Sembuh" width="50" height="50" />
+                                    <img src="asset/img/happy.png" alt="Sembuh" width="50" height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -98,33 +120,31 @@ function Cards(props) {
                                     <p className="text-white mb-0">Orang</p>
                                 </div>
                                 <div className="ml-auto">
-                                    <img src="asset/img/dead.png" alt="Meninggal" width="50" height="50" />
+                                    <img src="asset/img/dead.png" alt="Meninggal" width="50" height="50"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
+
             <div className="form-group mt-2">
-            <select className="form-control" onChange={changeHandler}>
-            <option value="global">Global</option>
-                {
-                    countries.map((ct,index) => {
-                        return (
-                        <option value={ct.iso3} key={index}>{ct.name}</option>
-                        )
-                    })
-                }
-            </select>
-        </div>
+                <select className="form-control" onChange={changeHandler} value={option}>
+                    <option value="global">Global</option>
+                    {
+                        countries.map((ct, index) => {
+                            return (<option value={ct.iso3} key={index}>{ct.name}</option>)
+                        })
+                    }
+                </select>
+            </div>
 
             <Switch>
-                <Route exact path="/">
-                    <ChartGlobal />
+                <Route exact="exact" path="/">
+                    <ChartGlobal/>
                 </Route>
                 <Route path="/:iso">
-                   <ChartCountry/>
+                    <ChartCountry/>
                 </Route>
             </Switch>
 
