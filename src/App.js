@@ -5,7 +5,7 @@ function App(props) {
     return (
 
             <div>
-                <img src="asset/img/logo.png" alt="corona logo" className="mt-3 mx-auto d-block" />
+                <img src="/covid-tracker/asset/img/logo.png" alt="corona logo" className="mt-3 mx-auto d-block" />
                 <Card/>
             </div>
     );

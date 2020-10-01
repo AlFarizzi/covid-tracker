@@ -51,8 +51,8 @@ function Cards(props) {
         setOption(old)
         console.log('bisa');
         if (e.target.value === "global") {
-            history.replace('/');
-            history.go('/');
+            history.replace('/covid-tracker');
+            history.go('/covid-tracker');
         } else {
             let a = e.target.value;
             axios
@@ -86,7 +86,7 @@ function Cards(props) {
                                     <p className="text-white mb-0">Orang</p>
                                 </div>
                                 <div className="ml-auto">
-                                    <img src="asset/img/sad.png" alt="Positif" width="50" height="50"/>
+                                    <img src="/covid-tracker/asset/img/sad.png" alt="Positif" width="50" height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ function Cards(props) {
                                     <p className="text-white mb-0">Orang</p>
                                 </div>
                                 <div className="ml-auto">
-                                    <img src="asset/img/happy.png" alt="Sembuh" width="50" height="50"/>
+                                    <img src="/covid-tracker/asset/img/happy.png" alt="Sembuh" width="50" height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +120,7 @@ function Cards(props) {
                                     <p className="text-white mb-0">Orang</p>
                                 </div>
                                 <div className="ml-auto">
-                                    <img src="asset/img/dead.png" alt="Meninggal" width="50" height="50"/>
+                                    <img src="/covid-tracker/asset/img/dead.png" alt="Meninggal" width="50" height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +140,7 @@ function Cards(props) {
             </div>
 
             <Switch>
-                <Route exact="exact" path="/">
+                <Route exact="exact" path="/covid-tracker">
                     <ChartGlobal/>
                 </Route>
                 <Route path="/:iso">
